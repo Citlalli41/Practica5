@@ -2,8 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width">
-<title>Museos CDMX - Geolocalización y Redes Sociales</title>
+<title>Geolocalización - Bellas Artes</title>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
@@ -13,28 +12,23 @@ body{
   background: linear-gradient(135deg, #667eea, #764ba2);
   min-height:100vh;
   margin:0;
-  padding:20px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
 .contenedor{
   background:white;
   padding:25px;
   border-radius:15px;
-  max-width:1100px;
-  margin:auto;
+  width:90%;
+  max-width:1000px;
   box-shadow:0 10px 25px rgba(0,0,0,0.25);
 }
 
 h1{
   text-align:center;
   color:#333;
-}
-
-select{
-  display:block;
-  margin:15px auto;
-  padding:10px;
-  font-size:16px;
 }
 
 .info{
@@ -46,7 +40,6 @@ select{
 .contenido{
   display:flex;
   gap:20px;
-  flex-wrap:wrap;
 }
 
 #mapa{
@@ -55,12 +48,25 @@ select{
   border-radius:12px;
 }
 
-.redes{
-  width:35%;
+.street{
+  width:40%;
 }
 
-iframe{
+.street img{
+  width:100%;
+  border-radius:12px;
+}
+
+.boton{
+  display:block;
+  margin:15px auto;
+  background:#667eea;
+  color:white;
+  padding:12px 20px;
   border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:16px;
 }
 </style>
 </head>
@@ -68,33 +74,19 @@ iframe{
 <body>
 
 <div class="contenedor">
-  <h1>Museos Emblemáticos de la CDMX</h1>
+  <h1>Geolocalización: Palacio de Bellas Artes</h1>
 
-  <select onchange="cambiarMuseo(this.value)">
-    <option value="">Selecciona un museo</option>
-    <option value="bellas">Palacio de Bellas Artes</option>
-    <option value="antropologia">Museo Nacional de Antropología</option>
-    <option value="frida">Museo Frida Kahlo</option>
-    <option value="soumaya">Museo Soumaya</option>
-    <option value="tamayo">Museo Tamayo</option>
-  </select>
-
-  <div class="info" id="info">
-    Selecciona un museo para ver su ubicación y publicaciones
+  <div class="info">
+    📍 <strong>Latitud:</strong> 19.4352 <br>
+    📍 <strong>Longitud:</strong> -99.1412
   </div>
 
   <div class="contenido">
     <div id="mapa"></div>
 
-    <div class="redes">
-      <h3>Publicaciones en Facebook</h3>
-      <iframe id="facebook"
-        width="340"
-        height="500"
-        scrolling="no"
-        allowfullscreen="true"
-        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
-      </iframe>
+    <div class="street">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Bellas_Artes_CDMX.jpg">
+      <button class="boton" onclick="abrirMaps()">Ver en Google Maps</button>
     </div>
   </div>
 </div>
@@ -102,71 +94,29 @@ iframe{
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script>
-const museos = {
-  bellas:{
-    nombre:"Palacio de Bellas Artes",
-    lat:19.4352,
-    lon:-99.1412,
-    fb:"https://www.facebook.com/BellasArtesCDMX"
-  },
-  antropologia:{
-    nombre:"Museo Nacional de Antropología",
-    lat:19.4260,
-    lon:-99.1860,
-    fb:"https://www.facebook.com/MuseosCDMX"
-  },
-  frida:{
-    nombre:"Museo Frida Kahlo",
-    lat:19.3556,
-    lon:-99.1629,
-    fb:"https://www.facebook.com/MuseoFridaKahlo"
-  },
-  soumaya:{
-    nombre:"Museo Soumaya",
-    lat:19.4407,
-    lon:-99.2040,
-    fb:"https://www.facebook.com/MuseoSoumayaFans"
-  },
-  tamayo:{
-    nombre:"Museo Tamayo",
-    lat:19.4269,
-    lon:-99.1917,
-    fb:"https://www.facebook.com/ArteModernoCDMX"
-  }
-};
+const lat = 19.4352;
+const lon = -99.1412;
 
-const mapa = L.map('mapa').setView([19.4326, -99.1332], 12);
+const mapa = L.map('mapa').setView([lat, lon], 16);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-  attribution:'&copy; OpenStreetMap'
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap'
 }).addTo(mapa);
 
-let marcador;
+const iconoRojo = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25,41],
+  iconAnchor: [12,41]
+});
 
-function cambiarMuseo(clave){
-  if(!clave) return;
+L.marker([lat, lon], {icon: iconoRojo})
+  .addTo(mapa)
+  .bindPopup("Palacio de Bellas Artes")
+  .openPopup();
 
-  const m = museos[clave];
-
-  document.getElementById("info").innerHTML = `
-    📍 <strong>${m.nombre}</strong><br>
-    Latitud: ${m.lat}<br>
-    Longitud: ${m.lon}
-  `;
-
-  mapa.setView([m.lat, m.lon], 16);
-
-  if(marcador){
-    mapa.removeLayer(marcador);
-  }
-
-  marcador = L.marker([m.lat, m.lon])
-    .addTo(mapa)
-    .bindPopup(m.nombre)
-    .openPopup();
-
-  document.getElementById("facebook").src =
-    `https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(m.fb)}&tabs=timeline&width=340&height=500&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true`;
+function abrirMaps(){
+  window.open(`https://www.google.com/maps?q=${lat},${lon}`);
 }
 </script>
 

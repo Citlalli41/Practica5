@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Portafolio de Evidencias</title>
+
+<style>
+:root{
+  --bg:#f7f7f7;
+  --sidebar:#b8c6db; /* azul pastel */
+  --accent:#6c5ce7;  /* morado pastel */
+  --text:#2d3436;
+  --card:#ffffff;
+}
+
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* ===== LOGIN ===== */
+#auth{
+  position:fixed;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#0003;
+}
+
+.box{
+  background:var(--card);
+  padding:40px;
+  border-radius:20px;
+  width:340px;
+  text-align:center;
+  box-shadow:0 8px 25px rgba(0,0,0,0.1);
+  animation:fadeIn 0.8s ease;
+}
+
+.box h2{
+  margin-bottom:20px;
+  color:var(--accent);
+}
+
+input{
+  width:90%;
+  padding:12px;
+  margin:10px;
+  border:1px solid #ccc;
+  border-radius:10px;
+  outline:none;
+  font-family:'Poppins',sans-serif;
+}
+
+button{
+  width:95%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
+  transition:0.3s;
+  font-family:'Poppins',sans-serif;
+}
+
+.btn-login{background:var(--accent);color:#fff;}
+.btn-reg{background:#636e72;color:#fff;}
+button:hover{transform:scale(1.05);}
+
+/* ===== APP ===== */
+#app{display:none;width:100%;}
+
+aside{
+  width:240px;
+  background:var(--sidebar);
+  height:100vh;
+  position:fixed;
+  left:0;
+  top:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  box-shadow:5px 0 15px rgba(0,0,0,0.1);
+  animation:slideIn 0.8s ease;
+}
+
+aside h2{
+  text-align:center;
+  padding:20px;
+  font-size:1.4em;
+  color:var(--accent);
+}
+
+nav ul{
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+
+nav li{
+  position:relative;
+}
+
+nav a{
+  display:block;
+  padding:15px 25px;
+  cursor:pointer;
+  text-decoration:none;
+  color:#2d3436;
+  transition:0.3s;
+  font-family:'Poppins',sans-serif;
+}
+
+nav a:hover{
+  background:var(--accent);
+  color:#fff;
+  border-radius:8px;
+}
+
+/* SUBMENÚ */
+nav li ul{
+  display:none;
+  position:absolute;
+  left:100%;
+  top:0;
+  background:#dfe6e9;
+  min-width:160px;
+  border-radius:10px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.15);
+  animation:fadeIn 0.5s ease;
+}
+
+nav li:hover ul{
+  display:block;
+}
+
+nav li ul li a{
+  padding:12px;
+  color:#2d3436;
+  font-family:'Poppins',sans-serif;
+}
+
+nav li ul li a:hover{
+  background:var(--accent);
+  color:#fff;
+  border-radius:6px;
+}
+
+/* USUARIO */
+#userInfo{
+  text-align:center;
+  padding:10px;
+  font-weight:bold;
+  color:#2d3436;
+  font-family:'Poppins',sans-serif;
+}
+
+aside button{
+  margin:5px auto 15px auto;
+  padding:8px 15px;
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:0.9em;
+  width:70%;
+}
+aside button:hover{opacity:0.85;}
+
+/* ===== MAIN ===== */
+main{
+  margin-left:240px;
+  width:calc(100% - 240px);
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+}
+
+.top{
+  padding:15px;
+  background:var(--card);
+  font-size:1.2em;
+  text-align:center;
+  border-bottom:2px solid var(--accent);
+  font-family:'Poppins',sans-serif;
+}
+
+.viewer{
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:0;
+}
+
+iframe,video{
+  width:100%;
+  height:100%;
+  border:none;
+  animation:fadeIn 0.6s ease;
+}
+
+/* ===== ANIMACIONES ===== */
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes slideIn{from{transform:translateX(-100%);}to{transform:translateX(0);}}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="auth">
+<div class="box">
+<h2>Acceso</h2>
+<input id="user" placeholder="Usuario">
+<input id="pass" type="password" placeholder="Contraseña">
+<button class="btn-reg" onclick="register()">Crear cuenta</button>
+<button class="btn-login" onclick="login()">Entrar</button>
+</div>
+</div>
+
+<!-- APP -->
+<div id="app">
+<aside>
+<h2>Bienvenid@ al portafolio</h2>
+<nav>
+<ul>
+<li>
+<a onclick="setPractica('geo')">🌐 Geolocalización</a>
+<ul>
+<li><a onclick="verPDF('geo')">📄 Ver PDF</a></li>
+<li><a onclick="verVideo('geo')">🎬 Ver Video</a></li>
+</ul>
+</li>
+<li>
+<a onclick="setPractica('tienda')">🏪 Tienda</a>
+<ul>
+<li><a onclick="verPDF('tienda')">📄 Ver PDF</a></li>
+<li><a onclick="verVideo('tienda')">🎬 Ver Video</a></li>
+</ul>
+</li>
+<li>
+<a onclick="setPractica('stream')">🎬 Streaming</a>
+<ul>
+<li><a onclick="verPDF('stream')">📄 Ver PDF</a></li>
+<li><a onclick="verVideo('stream')">🎬 Ver Video</a></li>
+</ul>
+</li>
+<li>
+<a onclick="setPractica('eco')">🛒 Ecommerce</a>
+<ul>
+<li><a onclick="verPDF('eco')">📄 Ver PDF</a></li>
+<li><a onclick="verVideo('eco')">🎬 Ver Video</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+<div id="userInfo"></div>
+<button onclick="logout()">Cerrar sesión</button>
+</aside>
+
+<main>
+<div class="top" id="titulo">Selecciona una práctica</div>
+<div class="viewer" id="viewer"></div>
+</main>
+</div>
+
+<script>
+let actual="";
+let currentUser="";
+
+/* LOGIN */
+function register(){
+ let u=user.value;
+ let p=pass.value;
+
+ if(!u||!p){alert("Llena todo");return;}
+
+ localStorage.setItem(u,p);
+ alert("Cuenta creada");
+}
+
+function login(){
+ let u=user.value;
+ let p=pass.value;
+
+ if(localStorage.getItem(u)===p){
+  currentUser=u;
+  document.getElementById("auth").style.display="none";
+  document.getElementById("app").style.display="flex";
+  document.getElementById("userInfo").innerText="👤 "+u;
+ }else alert("Error");
+}
+
+function logout(){location.reload();}
+
+/* PRACTICAS */
+function setPractica(id){
+ actual=id;
+
+ let nombres={
+  geo:"Geolocalización",
+  tienda:"Tienda",
+  stream:"Streaming",
+  eco:"Ecommerce"
+ };
+
+ document.getElementById("titulo").innerText=nombres[id];
+
+ let links={
+  geo:"https://citlalli41.github.io/Practica1/",
+  tienda:"https://citlalli41.github.io/Practica2/",
+  stream:"https://citlalli41.github.io/Practica3/",
+  eco:"https://citlalli41.github.io/Practica4/"
+ };
+
+ document.getElementById("viewer").innerHTML=
+ `<iframe src="${links[id]}"></iframe>`;
+}
+
+/* MOSTRAR PDF/VIDEO */
+function verPDF(id){
+ document.getElementById("viewer").innerHTML=
+ `<iframe src="docs/${id}.pdf"></iframe>`;
+}
+
+function verVideo(id){
+ document.getElementById("viewer").innerHTML=
+ `<video src="videos/${id}.mp4" controls></video>`;
+}
+</script>
+
+</body>
+</html>
